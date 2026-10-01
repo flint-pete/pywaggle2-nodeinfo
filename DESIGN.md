@@ -2,7 +2,9 @@
 
 Why this reader exists and the contract it implements. This is the node-identity
 slice of the broader pywaggle2 design; the full design doc (acquisition ladder,
-etc.) lives separately and is not needed to understand or land this piece.
+etc.) is [pywaggle2-design.md](https://github.com/flint-pete/sage-design-planning/blob/master/pywaggle2-design.md)
+(§2.2.3 is the missing-value contract). It is not needed to understand or land this
+piece.
 
 ## The problem
 
@@ -27,6 +29,9 @@ A first-class accessor, mirroring `waggle.data.vision.Camera`:
 info = Plugin.get_node_info()
 # -> NodeInfo(vsn, node_id, lat, lon, mobility, vsn_is_placeholder)
 ```
+
+`Plugin.get_node_info()` is the proposed upstream wrapper and does not exist yet.
+Today plugins call the function underneath it, `read_node_info()`, directly.
 
 This repo implements the **Tier-1 static** path: read node identity + surveyed
 coordinates from the env WES injects. (A Tier-2 live-GPS path for mobile nodes is
@@ -87,19 +92,26 @@ This reader is the static tier. The full resolution precedence, driven by the
 
 ### Live-GPS tier (designed, not built here)
 
-WES already runs `wes-gps-server` (gpsd on :2947). A live TPV stream was read from
-it on a static pole node — confirming that a fixed node with a real GPS receiver
-emits a live, slightly-jittering fix (receiver noise, not motion). That validates
-two things: (1) deployment-mobility and GPS-fix-liveness are orthogonal axes, and
-(2) for a `static` node the surveyed manifest coordinate is authoritative and the
-live jitter should be ignored. gpsd holds the serial device exclusively, so the
-correct design is a library socket wrapper, not per-plugin device reads — precisely
-the knowledge that belongs in pywaggle2. This Tier-2 path fills only the *location*
-half of `NodeInfo`; identity (`vsn`/`node_id`) always comes from the env/manifest.
+WES already runs `wes-gps-server` (gpsd on :2947). Rules for the future tier:
+
+- Deployment mobility and GPS-fix liveness are **orthogonal**: a fixed node with a
+  real receiver still emits a live, slightly jittering fix (receiver noise, not
+  motion).
+- For a `static` node the surveyed manifest coordinate is authoritative; ignore the
+  live jitter.
+- gpsd holds the serial device exclusively, so the design is a library **socket
+  wrapper**, not per-plugin device reads — knowledge that belongs in pywaggle2.
+- This tier fills only the *location* half of `NodeInfo`; identity
+  (`vsn`/`node_id`) always comes from the env/manifest.
+
+(The live gpsd observation these rules came from is in
+[docs/history/NOTES.md](docs/history/NOTES.md).)
 
 ## Producer / verification
 
 The env this reader consumes is produced by `wes-nodeinfo-injection` (v1.0.0): two
 upstream patches add GPS+mobility to the `wes-identity` ConfigMap and project it
-into every plugin pod via `EnvFrom`. The full chain — inject → read → geotag →
-upload → Sage data API — was verified end-to-end on H00F.
+into pods via `EnvFrom` (Tier 2, patched scheduler) — pods launched with
+`pluginctl run` do not get it; see README "When will my plugin see these vars?".
+The full chain — inject → read → geotag → upload → Sage data API — was verified
+end-to-end on H00F (history: [docs/history/NOTES.md](docs/history/NOTES.md)).

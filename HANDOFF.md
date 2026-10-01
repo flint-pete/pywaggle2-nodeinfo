@@ -1,7 +1,8 @@
 # HANDOFF — pywaggle2-nodeinfo (for the Sage CI team)
 
 The consumer half of the node-identity work. `wes-nodeinfo-injection` (v1.0.0)
-delivers five identity env vars into every plugin pod; **this** is the small
+delivers five identity env vars into scheduler-launched plugin pods (its Tier 2
+patched scheduler; `pluginctl run` pods don't get them); **this** is the small
 pywaggle2-side reader that turns them into a clean `NodeInfo` for plugin authors.
 Hand this repo to whoever lands node-info in upstream pywaggle.
 
@@ -15,7 +16,8 @@ no changes.
 
 ## The wire contract (must match the producer)
 
-WES injects these into every plugin pod. The reader depends on exactly this
+WES injects these into plugin pods (once the Tier 2 scheduler patch is merged). The
+reader depends on exactly this
 contract; `wes-nodeinfo-injection` produces exactly this. Keep them in lock-step.
 
 | Env var | Real value | Sentinel if unavailable | Reader normalizes to |
@@ -43,12 +45,10 @@ Normalization rules the reader enforces (see `DESIGN.md` for the why):
 - **25 unit tests** (`make test`, pure stdlib + pytest): real values, every
   sentinel, range-boundary coords, the never-fabricate invariant, the mobility
   tri-state, node_id/vsn edge cases, and `os.environ` default.
-- **End-to-end against the real WES injection (H00F):** the same reader logic
-  resolved real identity/GPS from the injected env, and `image-sampler2` consumed it
-  into a geotagged upload that appears in the public Sage data API
-  (`meta.vsn=H00F, node_id=00004cbb4701d16c`, EXIF carrying H00F's real coords).
-  The producing side is `wes-nodeinfo-injection` v1.0.0 (two upstream patches,
-  verified live).
+- **End-to-end against the real WES injection:** verified live (H00F, and Tier 1
+  again on H041 during the media-stack install). The producing side is
+  `wes-nodeinfo-injection` v1.0.x (two upstream patches). The original H00F
+  verification story is in [docs/history/NOTES.md](docs/history/NOTES.md).
 
 ## What the CI team owns
 
@@ -70,7 +70,14 @@ Normalization rules the reader enforces (see `DESIGN.md` for the why):
 
 ## Keep in sync
 
-`image-sampler2`'s `nodemeta._runtime_identity()` is an independent consumer that
-uses the **identical** sentinel contract (verified). `wes-nodeinfo-injection` keeps
-a mirror copy of this reader for its own e2e test. If the contract changes, update
-all three together.
+This repo (`waggle/data/node_info_env.py`) is canonical. Copies that must change
+with it if the contract changes:
+
+- `wes-nodeinfo-injection/pywaggle2/node_info_env.py` — byte-identical mirror (its
+  e2e test); check with `diff -q`.
+- `wes-nodeinfo-injection/node-test/test-plugin-pod.yaml` — condensed inline
+  reader; semantically equivalent, not byte-identical.
+- `media-sampler3/nodemeta.py` (`_runtime_identity()`) — independent
+  re-implementation of the same sentinel contract.
+- `sage-yolo2/node_info.py` and `sage-bioclip2/node_info.py` — vendored copies
+  (v0.1.0 @ `4f3e589`); see `sage-yolo2/VENDORED.md` for the body diff command.
