@@ -99,8 +99,8 @@ importing this package:
 
 | Where | What | Relation to `waggle/data/node_info_env.py` |
 |---|---|---|
-| [sage-yolo2](https://github.com/flint-pete/sage-yolo2) `node_info.py` | vendored copy (v0.1.0 @ `4f3e589`) | body byte-identical; see [VENDORED.md](https://github.com/flint-pete/sage-yolo2/blob/master/VENDORED.md) |
-| [sage-bioclip2](https://github.com/flint-pete/sage-bioclip2) `node_info.py` | vendored copy (v0.1.0 @ `4f3e589`) | body byte-identical; see its `VENDORED.md` |
+| [sage-yolo2](https://github.com/flint-pete/sage-yolo2) `node_info.py` | vendored copy (v0.1.1 @ `79aa76b`) | body byte-identical; see [VENDORED.md](https://github.com/flint-pete/sage-yolo2/blob/master/VENDORED.md) |
+| [sage-bioclip2](https://github.com/flint-pete/sage-bioclip2) `node_info.py` | vendored copy (v0.1.1 @ `79aa76b`) | body byte-identical; see its `VENDORED.md` |
 | [media-sampler3](https://github.com/flint-pete/media-sampler3) `nodemeta.py` | independent re-implementation (`_runtime_identity()`) | same sentinel contract, different code |
 | [wes-nodeinfo-injection](https://github.com/flint-pete/wes-nodeinfo-injection) `pywaggle2/node_info_env.py` | mirror for its e2e test | byte-identical |
 | wes-nodeinfo-injection `node-test/test-plugin-pod.yaml` | condensed inline reader in a test pod | semantically equivalent, not byte-identical |

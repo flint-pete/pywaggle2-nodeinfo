@@ -80,4 +80,4 @@ with it if the contract changes:
 - `media-sampler3/nodemeta.py` (`_runtime_identity()`) — independent
   re-implementation of the same sentinel contract.
 - `sage-yolo2/node_info.py` and `sage-bioclip2/node_info.py` — vendored copies
-  (v0.1.0 @ `4f3e589`); see `sage-yolo2/VENDORED.md` for the body diff command.
+  (v0.1.1 @ `79aa76b`); see `sage-yolo2/VENDORED.md` for the body diff command.
