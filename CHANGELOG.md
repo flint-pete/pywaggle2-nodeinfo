@@ -3,6 +3,11 @@
 All notable changes to `pywaggle2-nodeinfo`. Format loosely follows Keep a
 Changelog; this project uses semantic versioning.
 
+## [0.1.2] - 2026-10-02
+
+- README wording for the single install path (`pluginctl-nodeinfo`). Docs only;
+  no code change, so the consumers' vendored copy stays at v0.1.1.
+
 ## [0.1.1] - 2026-10-01
 
 Documentation pass for student handoff. No behavior change.
