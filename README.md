@@ -89,7 +89,7 @@ Tier 1 alone (just the ConfigMap) changes nothing a running plugin can see.
 > (gpsd) path. Same words, different axes. See
 [`wes-nodeinfo-injection`](https://github.com/flint-pete/wes-nodeinfo-injection) for
 the tiers, and the hub install guide
-[INSTALLING-MEDIA-SAMPLER3.md](https://github.com/flint-pete/media-sampler3/blob/master/INSTALLING-MEDIA-SAMPLER3.md) (Step 3) and
+[INSTALLING-MEDIA-SAMPLER3.md](https://github.com/flint-pete/media-sampler3/blob/master/INSTALLING-MEDIA-SAMPLER3.md) (Steps 2–3) and
 [docs/HOW-IT-WORKS.md](https://github.com/flint-pete/media-sampler3/blob/master/docs/HOW-IT-WORKS.md) for how it fits together.
 
 ## How plugins use this today (vendoring)
