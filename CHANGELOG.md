@@ -3,6 +3,11 @@
 All notable changes to `pywaggle2-nodeinfo`. Format loosely follows Keep a
 Changelog; this project uses semantic versioning.
 
+## [0.1.3] - 2026-11-10
+
+- Archived: merged upstream as pywaggle 0.57.0/0.57.1 `waggle.data.node_info_env`
+  (Nov 2026). README/HANDOFF banner. Docs only.
+
 ## [0.1.2] - 2026-10-02
 
 - README wording for the single install path (`pluginctl-nodeinfo`). Docs only;

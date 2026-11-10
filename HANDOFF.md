@@ -1,5 +1,11 @@
 # HANDOFF — pywaggle2-nodeinfo (for the Sage CI team)
 
+> **ARCHIVED, merged upstream (Nov 2026).** This reader is now
+> `waggle.data.node_info_env.read_node_info` in pywaggle 0.57.0/0.57.1 (code
+> unchanged; our tests came along). Use `pywaggle>=0.57.1` (0.57.0 still imports
+> numpy on that path). `Plugin.get_node_info()` was not added; import the function.
+> Plugins in the media stack no longer vendor this file. Kept for history.
+
 The consumer half of the node-identity work. `wes-nodeinfo-injection` (v1.0.0)
 delivers five identity env vars into scheduler-launched plugin pods (its Tier 2
 patched scheduler; `pluginctl run` pods don't get them); **this** is the small
